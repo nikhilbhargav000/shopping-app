@@ -8,9 +8,14 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
-public class ResponseMessage {
+public class SAppResponseMessage {
 
 	private int status;
+	private String value;
 	private String message;
 	
+	public SAppResponseMessage(int status, String message) {
+		this.status = status;
+		this.message = message;
+	}
 }
