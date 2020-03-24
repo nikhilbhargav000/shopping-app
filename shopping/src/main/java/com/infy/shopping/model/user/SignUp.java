@@ -1,4 +1,4 @@
-package com.infy.shopping.model;
+package com.infy.shopping.model.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,6 +16,6 @@ public class SignUp {
 	private String name;
 	private String password;
 	private String confirmPassword;
-	private String accountType;
+	private String guestId;
 	
 }

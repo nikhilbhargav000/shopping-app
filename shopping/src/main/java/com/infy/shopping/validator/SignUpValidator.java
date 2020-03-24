@@ -8,18 +8,18 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import com.infy.shopping.exception.SAppsException;
-import com.infy.shopping.model.AccountType;
-import com.infy.shopping.model.SignUp;
+import com.infy.shopping.model.user.AccountType;
+import com.infy.shopping.model.user.SignUp;
 
 @Component
 public class SignUpValidator implements Validator<SignUp> {
 
 	@Override
 	public boolean isValid(SignUp signUp) throws SAppsException {
-		
+
 		if (isMadatoryFieldsPresent(signUp) && isValidName(signUp.getName())
-				&& isValidConfirmPassword(signUp.getConfirmPassword(), signUp.getPassword()) && isValidPassword(signUp.getPassword()) 
-				&& isValidEmail(signUp.getEmail()) && isValidAccountType(signUp.getAccountType())) {
+				&& isValidConfirmPassword(signUp.getConfirmPassword(), signUp.getPassword())
+				&& isValidPassword(signUp.getPassword()) && isValidEmail(signUp.getEmail())) {
 			return true;
 		}
 		return false;
@@ -27,7 +27,7 @@ public class SignUpValidator implements Validator<SignUp> {
 
 	
 	public boolean isValidName(String name) throws SAppsException {
-		String regex = "[a-zA-Z]+";
+		String regex = "[a-zA-Z ]+";
 		if (StringUtils.isBlank(name) || !Pattern.matches(regex, name)) {
 			throw new SAppsException(HttpStatus.BAD_REQUEST.value(), "Name contains invalid characters");
 		}
@@ -35,7 +35,7 @@ public class SignUpValidator implements Validator<SignUp> {
 	}
 	
 	public boolean isValidPassword(String password) throws SAppsException {
-		String regex = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[^A-Za-z0-9])";
+		String regex = "(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[^A-Za-z0-9]).{4,}";
 		if (!Pattern.matches(regex, password)) {
 			throw new SAppsException(HttpStatus.BAD_REQUEST.value(),
 					"Password should contain atleast a uppercase and a lower case , a number and a special character");
@@ -66,20 +66,20 @@ public class SignUpValidator implements Validator<SignUp> {
 		if (StringUtils.isBlank(accountType)) {
 			throw new SAppsException(HttpStatus.BAD_REQUEST.value(), "Account type cannot be empty");
 		}
-		AccountType type = AccountType.valueOf(accountType);
-		if (type == null) {
+		try {
+			AccountType.valueOf(accountType);
+		} catch (IllegalArgumentException e) {
 			throw new SAppsException(HttpStatus.BAD_REQUEST.value(), "Account type should be valid");
 		}
 		return true;
 	}
 	
 	public boolean isMadatoryFieldsPresent(SignUp signUp) throws SAppsException {
-		if (StringUtils.isBlank(signUp.getName()) || StringUtils.isBlank(signUp.getEmail()) || 
-				StringUtils.isBlank(signUp.getPassword()) || StringUtils.isBlank(signUp.getConfirmPassword()) || 
-				StringUtils.isBlank(signUp.getAccountType())) {
+		if (StringUtils.isBlank(signUp.getName()) || StringUtils.isBlank(signUp.getEmail())
+				|| StringUtils.isBlank(signUp.getPassword()) || StringUtils.isBlank(signUp.getConfirmPassword())) {
 			throw new SAppsException(HttpStatus.BAD_REQUEST.value(), "All fields are mandatory");
 		}
 		return true;
 	}
-	
+
 }

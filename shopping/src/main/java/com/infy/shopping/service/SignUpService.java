@@ -1,7 +1,7 @@
 package com.infy.shopping.service;
 
 import com.infy.shopping.model.SAppResponseMessage;
-import com.infy.shopping.model.SignUp;
+import com.infy.shopping.model.user.SignUp;
 
 public interface SignUpService {
 
