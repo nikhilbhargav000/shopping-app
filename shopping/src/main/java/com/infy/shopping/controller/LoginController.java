@@ -23,6 +23,22 @@ public class LoginController {
 		this.loginService = loginService;
 	}
 	
+	/**
+	 * Featueres : 
+	 * - User Login
+	 * 		- UserName and Password should be present
+	 * 
+	 * - Guest Login
+	 * 		- GuestId should be present
+	 * 		- UserName and Password should be absent
+	 * 
+	 * - Create guest account
+	 * 		- CreateGuestUser should be true
+	 * 		- UserName, Password and GuestId should be absent
+	 * 
+	 * @param login
+	 * @return
+	 */
 	@PostMapping
 	public ResponseEntity<SAppResponseMessage> login(@RequestBody Login login) {
 		SAppResponseMessage response = loginService.login(login);

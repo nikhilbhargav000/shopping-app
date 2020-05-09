@@ -26,7 +26,6 @@ public class SignUpValidatorTest {
 							.email("nikhil.bhargav01@infosys.com")
 							.password("Abcd#1234")
 							.confirmPassword("Abcd#1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		assertTrue(signUpValidator.isValid(signUp));
@@ -40,7 +39,6 @@ public class SignUpValidatorTest {
 							// Password without specials char
 							.password("Abcd1234") 
 							.confirmPassword("Abcd1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
@@ -55,7 +53,6 @@ public class SignUpValidatorTest {
 							// Password without Capital letter
 							.password("abcd#1234") 
 							.confirmPassword("abcd#1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
@@ -70,7 +67,6 @@ public class SignUpValidatorTest {
 							// Password without smaller case letter
 							.password("ABCD#1234") 
 							.confirmPassword("ABCD#1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
@@ -86,7 +82,6 @@ public class SignUpValidatorTest {
 							// Password without digit 
 							.password("abcd#ABCD") 
 							.confirmPassword("abcd#ABCD")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
@@ -101,7 +96,6 @@ public class SignUpValidatorTest {
 							// confirm password and password not matching
 							.password("Abcd#1234") 
 							.confirmPassword("Xyz#1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
@@ -117,7 +111,6 @@ public class SignUpValidatorTest {
 							.email("nikhil.bhargav01@gmail.co.in")
 							.password("Abcd#1234") 
 							.confirmPassword("Abcd#1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
@@ -132,7 +125,6 @@ public class SignUpValidatorTest {
 							.email("nikhil.bhargav01@gmail.conn")
 							.password("Abcd#1234") 
 							.confirmPassword("Abcd#1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
@@ -147,64 +139,16 @@ public class SignUpValidatorTest {
 							.email("nikhil.bhargav01$gmail.com")
 							.password("Abcd#1234") 
 							.confirmPassword("Abcd#1234")
-//							.accountType("REGESTERED")
 							.build();
 		
 		
 		assertFalse(signUpValidator.isValid(signUp));
 	}
 	
-
-	@Test(expected=SAppsException.class)
-	public void testSignUp10() {
-		SignUp signUp = SignUp.builder()
-							.name("Nikhil Bhargav")	
-							.email("nikhil.bhargav01@gmail.com")
-							.password("Abcd#1234") 
-							.confirmPassword("Abcd#1234")
-							// with invalid accountType
-//							.accountType("REGESTEREDaa")
-							.build();
-		
-		
-		assertFalse(signUpValidator.isValid(signUp));
-	}
-
-	@Test
-	public void testSignUp11() {
-		SignUp signUp = SignUp.builder()
-							.name("Nikhil Bhargav")	
-							.email("nikhil.bhargav01@gmail.com")
-							.password("Abcd#1234") 
-							.confirmPassword("Abcd#1234")
-//							.accountType("GUEST")
-							.build();
-		
-		
-		assertTrue(signUpValidator.isValid(signUp));
-	}
-	
-
-//	@Test(expected=SAppsException.class)
-//	public void testSignUp12() {
-//		SignUp signUp = SignUp.builder()
-//							.name("Nikhil Bhargav")	
-//							.email("nikhil.bhargav01@gmail.com")
-//							.password("Abcd#1234") 
-//							.confirmPassword("Abcd#1234")
-//							// with invalid accountType
-//							.accountType("Guest")
-//							.build();
-//		
-//		
-//		assertFalse(signUpValidator.isValid(signUp));
-//	}
-	
-	@Test(expected=SAppsException.class)
+  	@Test(expected=SAppsException.class)
 	public void testSignUp13() {
 		SignUp signUp = SignUp.builder()
 							.name("Nikhil Bhargav")	
-							.email("nikhil.bhargav01@gmail.com")
 							.password("Abcd#1234") 
 							.confirmPassword("Abcd#1234")
 							// Mandatory Field missing
