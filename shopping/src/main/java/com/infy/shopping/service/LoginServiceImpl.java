@@ -11,15 +11,19 @@ import com.infy.shopping.exception.SAppsException;
 import com.infy.shopping.model.SAppResponseMessage;
 import com.infy.shopping.model.user.AccountType;
 import com.infy.shopping.model.user.Login;
+import com.infy.shopping.model.user.LoginResponse;
 import com.infy.shopping.repository.UserRepository;
+import com.infy.shopping.security.jwt.JwtUtil;
 
 @Service
 public class LoginServiceImpl implements LoginService {
-	
+
 	private final UserRepository userRepository;
+	private final JwtUtil jwtUtil;
 	
-	public LoginServiceImpl(UserRepository userRepository) {
+	public LoginServiceImpl(UserRepository userRepository, JwtUtil jwtUtil) {
 		this.userRepository = userRepository;
+		this.jwtUtil = jwtUtil;
 	}
 	
 	@Override
@@ -44,14 +48,18 @@ public class LoginServiceImpl implements LoginService {
 	
 	public SAppResponseMessage loginUser(Login login) {
 		
-		SAppResponseMessage response = new SAppResponseMessage();
+		LoginResponse response = new LoginResponse();
 		
 		UserEntity userEntity = userRepository.findByEmail(login.getUserEmail());
 		if (userEntity == null || !login.getPassword().equals(userEntity.getPassword()))
 			throw new SAppsException(HttpStatus.UNAUTHORIZED.value(), "Bad credencials");
 		
+		// Jwt token
+		String jwtToken = jwtUtil.generateJwtToken(userEntity.getEmail());
+		
 		response.setMessage("User login successful");
-		response.setValue(userEntity.getUserId());
+		response.setUserId(userEntity.getUserId());
+		response.setJwtToken(jwtToken);
 		return response;
 	}
 	
@@ -107,6 +115,5 @@ public class LoginServiceImpl implements LoginService {
 		}
 		return false;
 	}
-	
 	
 }

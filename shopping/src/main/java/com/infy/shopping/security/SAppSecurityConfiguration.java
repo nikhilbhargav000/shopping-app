@@ -8,17 +8,24 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.infy.shopping.security.jwt.JwtAuthenticationFilter;
 
 @EnableWebSecurity
 public class SAppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	
 	private final UserDetailsService userDetailsService;
+	private final JwtAuthenticationFilter jwtAuthenticationFilter;
 	
 	@Autowired
-	public SAppSecurityConfiguration(UserDetailsService userDetailsService) {
+	public SAppSecurityConfiguration(UserDetailsService userDetailsService,
+			JwtAuthenticationFilter jwtAuthenticationFilter) {
 		this.userDetailsService = userDetailsService;
+		this.jwtAuthenticationFilter = jwtAuthenticationFilter;
 	}
 	
 	@Override
@@ -30,8 +37,6 @@ public class SAppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		
 		http
-			.httpBasic()
-			.and()
 			.csrf().disable()
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 			.and()
@@ -41,12 +46,13 @@ public class SAppSecurityConfiguration extends WebSecurityConfigurerAdapter {
 			.antMatchers("/signup", "/login").permitAll()
 			.and().formLogin().disable();
 			
+		http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	@Bean
 	PasswordEncoder getPasswordEncoder() {
 		return NoOpPasswordEncoder.getInstance();
-//		return new BCryptPasswordEncoder();
+//		return new BCryptPasswordEncoder();	
 	}
 }
 

@@ -17,6 +17,7 @@ import com.infy.shopping.exception.SAppsException;
 import com.infy.shopping.model.user.AccountType;
 import com.infy.shopping.model.user.Login;
 import com.infy.shopping.repository.UserRepository;
+import com.infy.shopping.security.jwt.JwtUtil;
 import com.infy.shopping.service.LoginService;
 import com.infy.shopping.service.LoginServiceImpl;
 
@@ -25,12 +26,14 @@ public class LoginServiceTest {
 
 	@MockBean
 	private UserRepository userRepository;
+	@MockBean
+	private JwtUtil jwtUtil;
 	
 	private LoginService loginService;
 	
 	@Before
 	public void initLoginServiceTest() {
-		this.loginService = new LoginServiceImpl(userRepository);
+		this.loginService = new LoginServiceImpl(userRepository, jwtUtil);
 	}
 
 	@Test
