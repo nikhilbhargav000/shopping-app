@@ -1,6 +1,8 @@
 package com.infy.shopping.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -39,6 +41,7 @@ public class UserController {
 	}
 	
 	@PostMapping(value="/wishlist/{productName}/add")
+	@CacheEvict(value="wishlist", key="#userId")
 	public ResponseEntity<SAppResponseMessage> addWishlistProduct(@PathVariable("userId") String userId,
 			@PathVariable("productName") String productName, @RequestBody WishlistItem wishlistItem,
 			Authentication authentication) {
@@ -46,15 +49,17 @@ public class UserController {
 				authentication);
 		return new ResponseEntity<SAppResponseMessage>(response, HttpStatus.CREATED);
 	}
-	
+
 	@GetMapping(value="/wishlist")
-	public ResponseEntity<WishlistResponse> getWishlist(@PathVariable("userId") String userId,
+	@Cacheable(value="wishlist", key="#userId")
+	public WishlistResponse getWishlist(@PathVariable("userId") String userId,
 			Authentication authentication) {
 		WishlistResponse response = wishlistService.getWishlist(userId, authentication);
-		return new ResponseEntity<WishlistResponse>(response, HttpStatus.OK);
+		return response;
 	}
 	
 	@PostMapping(value="/wishlist/{productName}/remove")
+	@CacheEvict(value="wishlist", key="#userId")
 	public ResponseEntity<SAppResponseMessage> removeWishlistProduct(@PathVariable("userId") String userId,
 			@PathVariable("productName") String productName, Authentication authentication) {
 		SAppResponseMessage response = wishlistService.removeWishlistItem(userId, productName, authentication);
